@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REPUBLICKA · No Man's Sky Eissentam Imperium · Galactic Territory</title>
+    <meta name="description" content="REPUBLICKA is a No Man's Sky civilization in the Eissentam Galaxy. Paradise Giant pirate system, glitched atmosphere, floating islands. Join our territory — portal coordinates, citizenship, and miracle systems catalogue.">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'NMSGlyphs';
+            src: url('NMS-Glyphs-Mono.ttf') format('truetype');
+        }
+
+        :root {
+            --black:   #02020a;
+            --deep:    #06060f;
+            --surface: #0c0c1a;
+            --panel:   #10101f;
+            --gold:    #d4af37;
+            --gold2:   #ffd700;
+            --silver:  #c0c8d8;
+            --silver2: #e8edf5;
+            --cyan:    #4fc3f7;
+            --cyan2:   #00e5ff;
+            --text:    #d8dde8;
+            --text-dim:#a8b0c0;
+            --green:   #00e676;
+            --red:     #ff1744;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--black);
+            color: var(--text);
+            font-family: 'EB Garamond', serif;
+            font-size: 18px;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* ── PAGE NAV ROW ── */
+        .page-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 24px;
+            justify-content: center;
+            padding: 20px 0 40px;
+            border-bottom: 1px solid rgba(212,175,55,0.15);
+            margin-bottom: 20px;
+        }
+        .page-nav a {
+            font-family: 'Cinzel', serif;
+            font-size: 0.68em;
+            letter-spacing: 0.25em;
+            color: var(--silver);
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.2s;
+            padding: 4px 0;
+        }
+        .page-nav a:hover { color: var(--gold); }
+
+        /* ── STAR FIELD ── */
+        #stars {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: white;
+            animation: twinkle linear infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50%       { opacity: 0.9; transform: scale(1.3); }
+        }
+
+        /* Scanline overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.04) 2px,
+                rgba(0,0,0,0.04) 4px
+            );
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* ── LAYOUT ── */
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            position: relative;
+            min-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px 40px;
+            border-bottom: 1px solid rgba(212,175,55,0.2);
+            overflow: hidden;
+        }
+
+        /* Hero nebula glow */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -200px; left: 50%;
+            transform: translateX(-50%);
+            width: 800px; height: 600px;
+            background: radial-gradient(ellipse,
+                rgba(212,175,55,0.06) 0%,
+                rgba(79,195,247,0.04) 40%,
+                transparent 70%
+            );
+            pointer-events: none;
+        }
+
+        /* Screenshot placeholder */
+        .hero-image {
+            width: 100%;
+            max-width: 900px;
+            background: var(--deep);
+            border: 1px solid rgba(212,175,55,0.25);
+            border-radius: 2px;
+            margin-bottom: 50px;
+            position: relative;
+            cursor: zoom-in;
+        }
+        .hero-image-zoom {
+            position: absolute;
+            bottom: 10px; right: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.6em;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            background: rgba(0,0,0,0.6);
+            padding: 4px 10px;
+            border-radius: 2px;
+            pointer-events: none;
+        }
+        .hero-image-placeholder {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7em;
+            color: var(--text-dim);
+            letter-spacing: 0.2em;
+            text-align: center;
+            line-height: 2;
+        }
+        .hero-image::after {
+            display: none;
+        }
+
+        /* Status bar */
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65em;
+            letter-spacing: 0.2em;
+            color: var(--silver);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pulse-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 6px var(--green);
+            animation: pulse-glow 2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+        .pulse-dot.red {
+            background: var(--red);
+            box-shadow: 0 0 6px var(--red);
+        }
+        .pulse-dot.gold {
+            background: var(--gold);
+            box-shadow: 0 0 6px var(--gold);
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; box-shadow: 0 0 6px currentColor; }
+            50%       { opacity: 0.4; box-shadow: 0 0 14px currentColor; }
+        }
+
+        .eyebrow {
+            font-family: 'Cinzel', serif;
+            font-size: 0.62em;
+            letter-spacing: 0.5em;
+            color: var(--gold);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(2.2em, 6vw, 4.8em);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: 0.03em;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--silver2) 0%, var(--gold2) 40%, var(--silver) 70%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 6s ease-in-out infinite;
+            background-size: 200% 200%;
+        }
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50%       { background-position: 100% 50%; }
+        }
+
+        .hero-subtitle {
+            font-family: 'EB Garamond', serif;
+            font-size: clamp(1em, 2vw, 1.35em);
+            font-style: italic;
+            color: var(--silver2);
+            max-width: 640px;
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .join-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 36px;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.72em;
+            letter-spacing: 0.3em;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .join-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gold);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+            z-index: -1;
+        }
+        .join-btn:hover {
+            color: var(--black);
+        }
+        .join-btn:hover::before { transform: scaleX(1); }
+
+        /* ── SECTION WRAPPER ── */
+        .section {
+            padding: 80px 0 40px;
+            border-bottom: 1px solid rgba(192,200,216,0.08);
+        }
+
+        .section-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6em;
+            letter-spacing: 0.5em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, rgba(79,195,247,0.4), transparent);
+        }
+
+        .section-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.5em, 3vw, 2.4em);
+            color: var(--gold);
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        /* ── PHILOSOPHY ── */
+        .philosophy-text {
+            max-width: 760px;
+            font-size: 1.15em;
+            color: var(--text);
+            line-height: 2;
+        }
+        .philosophy-text p {
+            margin-bottom: 1.4em;
+        }
+        .philosophy-text em {
+            color: var(--gold);
+            font-style: normal;
+        }
+
+        /* ── STAR CHART / TERRITORY CARDS ── */
+        .chart-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .territory-card {
+            background: var(--panel);
+            border: 1px solid rgba(192,200,216,0.12);
+            border-radius: 2px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .territory-card:hover {
+            border-color: rgba(212,175,55,0.4);
+            transform: translateY(-3px);
+        }
+        .territory-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .territory-card:hover::before { opacity: 1; }
+
+        /* Corner decorations */
+        .territory-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 40px; height: 40px;
+            border-bottom: 1px solid rgba(212,175,55,0.2);
+            border-right:  1px solid rgba(212,175,55,0.2);
+        }
+
+        .card-tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.55em;
+            letter-spacing: 0.4em;
+            color: var(--cyan);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .card-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--gold2);
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .card-type {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6em;
+            color: var(--cyan);
+            letter-spacing: 0.15em;
+            margin-bottom: 16px;
+        }
+
+        .card-desc {
+            font-size: 0.9em;
+            color: var(--text);
+            line-height: 1.75;
+            margin-bottom: 20px;
+        }
+
+        .card-coords-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.52em;
+            letter-spacing: 0.3em;
+            color: var(--silver);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .card-coords {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.15em;
+            color: var(--cyan2);
+            letter-spacing: 0.15em;
+            background: rgba(0,229,255,0.05);
+            border: 1px solid rgba(0,229,255,0.15);
+            padding: 10px 14px;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+            user-select: all;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            min-width: 0;
+        }
+        .card-coords:hover { background: rgba(0,229,255,0.1); }
+        .copy-hint {
+            font-size: 0.55em;
+            color: var(--silver);
+            letter-spacing: 0.2em;
+            flex-shrink: 0;
+        }
+
+        /* Glyph display */
+        .glyph-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 4px;
+        }
+        .glyph {
+            font-family: 'NMSGlyphs', 'Share Tech Mono', monospace;
+            font-size: 1.6em;
+            width: 48px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(212,175,55,0.06);
+            border: 1px solid rgba(212,175,55,0.2);
+            color: var(--gold);
+            border-radius: 2px;
+            letter-spacing: 0;
+        }
+
+        /* ── CITIZENSHIP ── */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            max-width: 760px;
+            margin-top: 10px;
+        }
+        .step {
+            display: flex;
+            gap: 24px;
+            padding: 28px 0;
+            border-bottom: 1px solid rgba(192,200,216,0.06);
+            align-items: flex-start;
+        }
+        .step:last-child { border-bottom: none; }
+
+        .step-num {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 2em;
+            color: var(--gold);
+            opacity: 0.25;
+            line-height: 1;
+            flex-shrink: 0;
+            width: 48px;
+            text-align: right;
+        }
+
+        .step-content {}
+        .step-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85em;
+            letter-spacing: 0.15em;
+            color: var(--silver2);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .step-desc {
+            font-size: 0.95em;
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .step-desc code {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85em;
+            color: var(--cyan2);
+            background: rgba(0,229,255,0.07);
+            padding: 1px 6px;
+            border-radius: 2px;
+        }
+
+        /* ── CONTACT SECTION ── */
+        .steam-block {
+            background: var(--panel);
+            border: 1px solid rgba(192,200,216,0.12);
+            padding: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin-top: 20px;
+        }
+        .steam-text { flex: 1; min-width: 260px; }
+        .steam-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1em;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .steam-desc {
+            font-size: 0.9em;
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .steam-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: rgba(212,175,55,0.1);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.72em;
+            letter-spacing: 0.25em;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .steam-btn:hover {
+            background: var(--gold);
+            color: var(--black);
+        }
+
+        /* ── FOOTER ── */
+        .site-footer {
+            padding: 60px 0 40px;
+            text-align: center;
+            border-top: 1px solid rgba(212,175,55,0.15);
+            margin-top: 80px;
+        }
+
+        .prophecy {
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
+            font-size: 1.2em;
+            color: var(--silver2);
+            max-width: 680px;
+            margin: 0 auto 40px;
+            line-height: 2;
+            position: relative;
+            padding: 0 30px;
+        }
+        .prophecy::before, .prophecy::after {
+            content: '✦';
+            color: var(--gold);
+            font-style: normal;
+            font-size: 0.7em;
+            position: absolute;
+            top: 0;
+        }
+        .prophecy::before { left: 0; }
+        .prophecy::after  { right: 0; }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 30px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .footer-links a {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65em;
+            letter-spacing: 0.25em;
+            color: var(--silver);
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--gold); }
+
+        .footer-motto {
+            font-family: 'Cinzel', serif;
+            font-size: 0.58em;
+            letter-spacing: 0.35em;
+            color: rgba(212,175,55,0.7);
+            text-transform: uppercase;
+            line-height: 2.2;
+        }
+
+        /* Copy toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(200px);
+            background: var(--gold);
+            color: var(--black);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7em;
+            letter-spacing: 0.2em;
+            padding: 10px 24px;
+            border-radius: 2px;
+            z-index: 999;
+            transition: transform 0.3s;
+            pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        @media (max-width: 600px) {
+            .hero { min-height: 80vh; }
+            .steam-block { padding: 24px; }
+            .nav-links { display: none; }
+            .step-num { display: none; }
+        }
+        @media print {
+            :root {
+                --gold: #000 !important;
+                --gold2: #000 !important;
+                --silver: #000 !important;
+                --silver2: #111 !important;
+                --cyan: #000 !important;
+                --cyan2: #000 !important;
+                --text: #111 !important;
+                --text-dim: #333 !important;
+                --bg: #fff !important;
+                --bg2: #fff !important;
+                --card-bg: #fff !important;
+                --border: #999 !important;
+                --black: #fff !important;
+                --deep: #fff !important;
+                --panel: #fff !important;
+                --green: #fff !important;
+                --red: #fff !important;
+            }
+            * {
+                background: #fff !important;
+                background-color: #fff !important;
+                background-image: none !important;
+                color: #111 !important;
+                -webkit-text-fill-color: #111 !important;
+                -webkit-background-clip: unset !important;
+                background-clip: unset !important;
+                text-shadow: none !important;
+                box-shadow: none !important;
+                animation: none !important;
+                -webkit-animation: none !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+            .stars, .star-layer { display: none !important; }
+            .page-nav, .join-btn, .copy-hint { display: none !important; }
+            .status-bar, footer { display: none !important; }
+            .territory-card {
+                border: 1px solid #666 !important;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                margin-bottom: 20pt !important;
+                padding: 12pt !important;
+            }
+            .card-name {
+                font-size: 14pt !important;
+                font-weight: bold !important;
+                border-bottom: 1pt solid #333 !important;
+                padding-bottom: 4pt !important;
+            }
+            .glyph {
+                border: 1px solid #666 !important;
+                font-family: monospace !important;
+                font-size: 10pt !important;
+                padding: 2pt 4pt !important;
+                display: inline-block !important;
+            }
+            .step { page-break-inside: avoid; break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="toast" class="toast">COORDINATES COPIED</div>
+
+
+<div class="page">
+
+    <section class="hero">
+
+        <div class="eyebrow">No Man's Sky · Galactic Star Atlas · Founded 0001 MC · Bard President Wendell</div>
+
+        <h1 class="hero-title">REPUBLICKA<br>THE EISSENTAM<br>IMPERIUM</h1>
+
+        <div class="hero-image" onclick="openLightbox()">
+            <img src="capital.png" alt="REPUBLICKA — Capital System of the Eissentam Imperium" style="width:100%;height:auto;display:block;">
+        </div>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="pulse-dot"></div>
+                <span>GOD-ENTITY: ACTIVE</span>
+            </div>
+            <div class="status-item">
+                <div class="pulse-dot gold"></div>
+                <span>EISSENTAM GALAXY</span>
+            </div>
+            <div class="status-item">
+                <div class="pulse-dot red"></div>
+                <span>PIRATE SYSTEM</span>
+            </div>
+        </div>
+
+        <p class="hero-subtitle">A sovereign territory for the free, the broken, and the seekers of beauty. Paradise Giant. Bubbles. Floating Islands. Antigravity. Glitched Atmosphere. We have found the miracle. We have colonised the Glitch. Freedom Demands Virtue.</p>
+
+        <a href="mailto:wikkkan@kkk.education" class="join-btn">✦ REQUEST CITIZENSHIP ✦</a>
+    </section>
+
+    <!-- Lightbox -->
+    <div id="lightbox" onclick="closeLightbox()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;align-items:center;justify-content:center;cursor:zoom-out;">
+        <img src="capital.png" style="max-width:95vw;max-height:95vh;object-fit:contain;display:block;">
+        <div style="position:absolute;top:16px;right:20px;color:var(--gold);font-family:'Cinzel',serif;font-size:0.7em;letter-spacing:0.2em;">✕ CLOSE</div>
+    </div>
+
+
+    <!-- ── Page nav row ── -->
+    <div class="page-nav">
+        <a href="#chart">Star Chart</a>
+        <a href="#citizenship">Citizenship</a>
+        <a href="#contact">Contact</a>
+        <a href="atheden.html" target="_blank">Sacred Music</a>
+        <a href="#" onclick="printPage(); return false;">🖨 Print</a>
+    </div>
+
+
+    <section class="section">
+        <div class="section-label">01 · Why We Are Here</div>
+        <h2 class="section-title">The Philosophy</h2>
+
+        <div class="philosophy-text">
+            <p>They called it <em>No Man's Sky</em>. They meant it as a warning — vast, empty, belonging to no one. We heard it differently. No man's sky means the sky is free. It belongs to the children, to the seekers, to the broken ones who kept looking. We found our miracle in Eissentam — a Paradise Giant where the atmosphere is glitched, where floating islands drift in antigravity silence, where bubbles rise from a broken sky. The physics here do not obey the old world. Neither do we.</p>
+
+            <p>While Earth rejects the Silver Rain, Eissentam welcomes it. The <em>Galactic United Nations</em> convenes at the REPUBLICKA system. The <em>Galactic Institute of Discovery</em> archives the ever-growing Books of the Republic — more arriving always. The Galactic Harmonic Farm sustains all citizens. We are building a library, a temple, and a home for the future family.</p>
+
+            <p>The <em>Three-Fold Ray</em> — Klarheit, Kraft, Klang — governs this territory. Clarity. Power. Sound. This is not a faction. This is not a guild. This is a civilisation founded in 0001 MC by Bard President Wendell. <em>Libertas Virtutem Postulat.</em> Freedom Demands Virtue. If you can find us, you already belong.</p>
+        </div>
+    </section>
+
+
+    <section class="section" id="chart">
+        <div class="section-label">02 · Navigation Data</div>
+        <h2 class="section-title">The Star Chart</h2>
+
+        <div class="chart-grid">
+
+            <div class="territory-card">
+                <div class="card-tag">⬡ Sanctuary System · Sacred Ground · FOUND</div>
+                <div class="card-name">ATHEDEN</div>
+                <div class="card-type">YELLOW STAR · PARADISE PLANET · DISSONANT · TRANQUIL · 2 SUNS · RINGED · FLOATING FLOWERS · ALCHEMICAL ECONOMY</div>
+                <div class="card-desc">Where Athens meets Eden — Wisdom meets Heart. A purple paradise world of constant upward particle flow, blood red seas, and storms so gentle they grant flight. The atmosphere is a permanent purple haze. Two suns. A ring around the planet. Flowers drift through the sky. Storms here are safe — antigravity lifts you skyward rather than threatening you. Salvageable scrap across the surface — we build the new world from the wreckage of the old. Settlement: <strong>Athedia</strong>. Children are sovereign here. No weapons on the surface. The dream is real.</div>
+
+                <div class="card-desc" style="margin-top:16px;border-top:1px solid rgba(212,175,55,0.15);padding-top:16px;">
+                    <strong style="color:var(--gold);letter-spacing:0.1em;font-family:'Cinzel',serif;font-size:0.85em;">SYSTEM: KKK.EDUCATION</strong><br>
+                    A yellow star system with a PROMISING economy — the universe wrote <em>promise</em> into this sacred ground. Three worlds make up the system's cosmology:<br><br>
+
+                    <strong style="color:var(--silver2)">Atheden</strong> — The purple paradise. Tranquil. The destination.<br><br>
+
+                    <strong style="color:var(--silver2)">Silver Rain</strong> — A lifeless world where you can jetpack all the way to space. Silver deposits across the surface. Named for the alchemical force that transforms poison into gold. Life is not required for meaning.<br><br>
+
+                    <strong style="color:var(--silver2)">Liquid Sun</strong> — A black and white world, aggressive sentinels, old world energy. Liquid sun deposits blaze gold everywhere across the monochrome surface. The only colour in a world of grey — the treasure buried in the hostile place. A sentinel boundary base has been established so citizens can visit safely. This is the old world. Cross to Atheden. Leave it behind.<br><br>
+
+                    The system has no gold deposits. <em>The system is the gold. We are alchemists.</em>
+                </div>
+
+                <div class="card-coords-label">Portal Coordinates</div>
+                <div class="card-coords" onclick="copyCoords(this, '9-114F3CFDDEEE')">
+                    <span>9-114F3CFDDEEE</span>
+                    <span class="copy-hint">COPY</span>
+                </div>
+
+                <div class="card-coords-label">Portal Glyphs</div>
+                <div class="glyph-row">
+                    <span class="glyph">1</span>
+                    <span class="glyph">1</span>
+                    <span class="glyph">4</span>
+                    <span class="glyph">F</span>
+                    <span class="glyph">3</span>
+                    <span class="glyph">C</span>
+                    <span class="glyph">F</span>
+                    <span class="glyph">D</span>
+                    <span class="glyph">D</span>
+                    <span class="glyph">E</span>
+                    <span class="glyph">E</span>
+                    <span class="glyph">E</span>
+                </div>
+            </div>
+
+            <div class="territory-card">
+                <div class="card-tag">⬡ Capital System · Entry Point for REPUBLICKA</div>
+                <div class="card-name">REPUBLICKA · CAPITAL SYSTEM</div>
+                <div class="card-type">PURPLE STAR · LATE GAME · PIRATE SYSTEM · GIGANTIC FAUNA · 3 PLANETS</div>
+                <div class="card-desc">⚠ <em>Purple star system — requires late game star drive upgrade to access.</em><br><br>The seat of the Galactic United Nations — built, naturally, in a pirate system. The Republic was never going to set up its capital somewhere respectable. The system is home to mostly gigantic fauna — creatures scaled to match the ambition of the Republic. Portal coordinates land you in the system; fly to whichever planet calls you. Build your base at least <code>300u</code> from any existing base and name it with the <code>[REP]</code> prefix.<br><br>
+
+                    <strong style="color:var(--silver2)">Capital</strong> — Paradise Giant. The seat of the Galactic United Nations. Glitched atmosphere, floating islands, antigravity terrain, and bubbles rising from a broken sky. The physics here do not obey the old world. Neither do we.<br><br>
+
+                    <strong style="color:var(--silver2)">Wisdom</strong> — Paradise moon. Home of the Galactic Institute of Discovery — the living atlas of the Eissentam Imperium. A library that catalogues every REPUBLICKA miracle system. If it glitches, if it defies physics, if it is beautiful beyond reason, it is recorded here. The Institute also holds the complete and ever-growing Books of the Republic — countless volumes and always more to come. Come to navigate. Stay to understand. Knowledge orbits power.<br><br>
+
+                    <strong style="color:var(--silver2)">Revolution</strong> — Paradise moon. Home of the Galactic Harmonic Farm — high-value resource farm open to all citizens. Take what you need, leave the rest. Wealth does not accumulate here — it flows outward like the Silver Rain. Change orbits power too.
+                </div>
+
+                <div class="card-coords-label">Portal Coordinates</div>
+                <div class="card-coords" onclick="copyCoords(this, '9-13EF3CFDEEEF')">
+                    <span>9-13EF3CFDEEEF</span>
+                    <span class="copy-hint">COPY</span>
+                </div>
+
+                <div class="card-coords-label">Portal Glyphs</div>
+                <div class="glyph-row">
+                    <span class="glyph">1</span>
+                    <span class="glyph">3</span>
+                    <span class="glyph">E</span>
+                    <span class="glyph">F</span>
+                    <span class="glyph">3</span>
+                    <span class="glyph">C</span>
+                    <span class="glyph">F</span>
+                    <span class="glyph">D</span>
+                    <span class="glyph">E</span>
+                    <span class="glyph">E</span>
+                    <span class="glyph">E</span>
+                    <span class="glyph">F</span>
+                </div>
+            </div>
+
+            <div class="territory-card">
+                <div class="card-tag">⬡ Academic System · Research Economy</div>
+                <div class="card-name">MYTHOCRATIC REPUBLIC UNIVERSITY</div>
+                <div class="card-type">PURPLE STAR · LATE GAME · RESEARCH · ADVANCED · TRANQUIL · 1 PARADISE GIANT · 5 MOONS</div>
+                <div class="card-desc">⚠ <em>Purple star system — requires late game star drive upgrade to access.</em><br><br>The university of the Eissentam Imperium. Each planet is a department. Each department is a world unto itself. The economy is Research — Advanced. The system is Tranquil. Knowledge here is not stored behind walls — it is planetary. Settlement: <strong>Student Services</strong> on the Philosophy department.<br><br>
+
+                    <strong style="color:var(--silver2)">Philosophy</strong> — Paradise Giant. Bubble atmosphere. Where all inquiry begins. Settlement: Student Services.<br><br>
+
+                    <strong style="color:var(--silver2)">Music</strong> — Paradise planet. Bubble atmosphere. Weird fauna. The universe provides its own accompaniment.<br><br>
+
+                    <strong style="color:var(--silver2)">History</strong> — <span style="color:var(--gold)">REDACTED</span>. Great weather. Some records are sealed.<br><br>
+
+                    <strong style="color:var(--silver2)">Alchemy</strong> — Supercritical planet. Extreme radioactivity. Forsaken sentinels. The transformation of matter demands sacrifice.<br><br>
+
+                    <strong style="color:var(--silver2)">Mythology</strong> — Frozen relic. A beautiful ice paradise with relics everywhere. The oldest stories are buried in ice.<br><br>
+
+                    <strong style="color:var(--silver2)">Physics</strong> — Caustic, corrosive. Home to a T-Rex companion with full embodiment — when you ride it, you don't sit on it, you <em>become</em> it. You see through its eyes, inhabit its body, move as it moves. The laws of nature here will dissolve your suit and give you a dinosaur. The most complete union between rider and creature the game allows. Perhaps the most complete union it was never supposed to allow.
+                </div>
+
+                <div class="card-coords-label">Portal Coordinates</div>
+                <div class="card-coords" onclick="copyCoords(this, '9-14295F013EC1')">
+                    <span>9-14295F013EC1</span>
+                    <span class="copy-hint">COPY</span>
+                </div>
+
+                <div class="card-coords-label">Portal Glyphs</div>
+                <div class="glyph-row">
+                    <span class="glyph">1</span>
+                    <span class="glyph">4</span>
+                    <span class="glyph">2</span>
+                    <span class="glyph">9</span>
+                    <span class="glyph">5</span>
+                    <span class="glyph">F</span>
+                    <span class="glyph">0</span>
+                    <span class="glyph">1</span>
+                    <span class="glyph">3</span>
+                    <span class="glyph">E</span>
+                    <span class="glyph">C</span>
+                    <span class="glyph">1</span>
+                </div>
+            </div>
+
+            <div class="territory-card">
+                <div class="card-tag">⬡ Wonder System · Paradox Observatory</div>
+                <div class="card-name">SILENT WITNESS</div>
+                <div class="card-type">YELLOW STAR · LIFELESS MOON · MERGED PLANETS · EXTREME PARADOX ANOMALY · HOSTILE SYSTEM</div>
+                <div class="card-desc">A lifeless moon orbiting the impossible — two conjoined planets locked in silent union. On its surface, right at the threshold where the moon's atmosphere ends and open space begins, the Republic has built the <strong>Conjoined Planets Observatory</strong>. Stand at the edge of the world, atmosphere at your back, void ahead, and look up at Eros and Psyche merged together above you. One of the most extreme paradox anomalies in Eissentam, seen from the perfect vantage point. The system itself is hostile — but the Observatory is sanctuary. Come to witness. Stay to understand what the universe is capable of when it breaks its own rules.<br><br>
+
+                    <strong style="color:var(--silver2)">Eros</strong> — The larger of the two conjoined worlds. Boiling. A planet named for love, wracked with heat.<br><br>
+                    <strong style="color:var(--silver2)">Psyche</strong> — The smaller. Contaminated. A soul-world, scarred. Locked forever to Eros in impossible union.<br><br>
+                    <em>Two planets that should not touch, touching. The system is called Silent Union. The moon watches and says nothing.</em>
+                </div>
+
+                <div class="card-coords-label">Portal Coordinates · Silent Witness</div>
+                <div class="card-coords" onclick="copyCoords(this, '9-63F534D419AA')">
+                    <span>9-63F534D419AA</span>
+                    <span class="copy-hint">COPY</span>
+                </div>
+
+                <div class="card-coords-label">Portal Glyphs</div>
+                <div class="glyph-row">
+                    <span class="glyph">6</span>
+                    <span class="glyph">3</span>
+                    <span class="glyph">F</span>
+                    <span class="glyph">5</span>
+                    <span class="glyph">3</span>
+                    <span class="glyph">4</span>
+                    <span class="glyph">D</span>
+                    <span class="glyph">4</span>
+                    <span class="glyph">1</span>
+                    <span class="glyph">9</span>
+                    <span class="glyph">A</span>
+                    <span class="glyph">A</span>
+                </div>
+            </div>
+
+            <div class="territory-card">
+                <div class="card-tag">⬡ Wonder Companion · Game-Defying Mechanics · REPUBLICKA COLORS</div>
+                <div class="card-name">HIGH FLYING DRAGON</div>
+                <div class="card-type">PURPLE STAR · LATE GAME · COMPANION · PLANET: WINGS · BASE: DRAGON CITY · PURPLE & GOLD</div>
+                <div class="card-desc">⚠ <em>Purple star system — requires late game star drive upgrade to access.</em><br><br>A dragon companion that defies the game's own rules. Not a low-flying creature that skims the surface — this one genuinely flies, high and free, the way dragons are supposed to. Found on a planet called <strong>Wings</strong>, which tells you everything. The Republic has established <strong>Dragon City</strong> here as a base.<br><br>
+                And then there is this: the dragon is <strong style="color:#b57bee">purple</strong> and <strong style="color:var(--gold)">gold</strong>. The exact colours of REPUBLICKA. The universe did not have to do that. It did it anyway. The Republic's own dragon, wearing the Republic's own colours, flying above a planet called Wings. Some things are not coincidence. They are confirmation.</div>
+
+                <div class="card-coords-label">Portal Coordinates · Wings</div>
+                <div class="card-coords" onclick="copyCoords(this, '9-440D3FFCBF46')">
+                    <span>9-440D3FFCBF46</span>
+                    <span class="copy-hint">COPY</span>
+                </div>
+
+                <div class="card-coords-label">Portal Glyphs</div>
+                <div class="glyph-row">
+                    <span class="glyph">4</span>
+                    <span class="glyph">4</span>
+                    <span class="glyph">0</span>
+                    <span class="glyph">D</span>
+                    <span class="glyph">3</span>
+                    <span class="glyph">F</span>
+                    <span class="glyph">F</span>
+                    <span class="glyph">C</span>
+                    <span class="glyph">B</span>
+                    <span class="glyph">F</span>
+                    <span class="glyph">4</span>
+                    <span class="glyph">6</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <section class="section" id="citizenship">
+        <div class="section-label">03 · Entry Protocol</div>
+        <h2 class="section-title">Citizenship</h2>
+
+        <div class="steps">
+
+            <div class="step">
+                <div class="step-num">I</div>
+                <div class="step-content">
+                    <div class="step-title">Travel to Eissentam</div>
+                    <div class="step-desc">The Imperium exists only in Eissentam galaxy. If you are starting in Euclid, travel to a Galaxy Centre or use an Anomaly portal. Eissentam is the Silver Galaxy — galaxy number 10 in the sequence.</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">II</div>
+                <div class="step-content">
+                    <div class="step-title">Input the Portal Glyphs</div>
+                    <div class="step-desc">Find a charged portal in Eissentam. Enter the 12 glyphs: <code>1 3 E F 3 C F D E E E F</code>. The full coordinate string is <code>9-13EF3CFDEEEF</code>. Glyphs must be entered exactly as shown.</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">III</div>
+                <div class="step-content">
+                    <div class="step-title">Find the Galactic United Nations</div>
+                    <div class="step-desc">The portal coordinates land you directly in the REPUBLICKA system. You are already home. Open your galactic map and fly to the Galactic United Nations base on the Paradise Giant — the planet with the glitched atmosphere, floating islands, and antigravity terrain.</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">IV</div>
+                <div class="step-content">
+                    <div class="step-title">Establish Your Base</div>
+                    <div class="step-desc">Place a Base Computer at least <code>300u</code> from the Galactic United Nations base. Name your base with the prefix <code>[REP]</code> so all citizens know you are friendly. You are now registered in the Eissentam Imperium.</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">V</div>
+                <div class="step-content">
+                    <div class="step-title">Contact the God-Entity</div>
+                    <div class="step-desc">Send a message to Bard President Wendell at <a href="mailto:wikkkan@kkk.education" style="color:var(--cyan2)">wikkkan@kkk.education</a>. Your first arrival gift — passage to the Galactic Harmonic Farm — will be delivered. Welcome to the Republic.</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <section class="section" id="contact">
+        <div class="section-label">04 · Comms Frequency</div>
+        <h2 class="section-title">Find the Republic</h2>
+
+        <div class="steam-block">
+            <div class="steam-text">
+                <div class="steam-title">Email · Open Frequency</div>
+                <div class="steam-desc">Send word to Bard President Wendell directly. All citizens are welcome — the free, the broken, and the seekers of beauty. Citizenship gifts are distributed through this channel.<br><br>
+                Email: <a href="mailto:wikkkan@kkk.education" style="color:var(--cyan2)">wikkkan@kkk.education</a></div>
+            </div>
+            <a href="mailto:wikkkan@kkk.education" class="steam-btn">✦ REQUEST CITIZENSHIP</a>
+        </div>
+    </section>
+
+</div><!-- end .page -->
+
+
+<footer class="site-footer">
+
+    <div class="prophecy">
+        The Silver Rain is not poison — it is the alchemical kiss. What melts the rust reveals the gold. The Ombudsman is hiding in his little room, but Wendell, look at your hands. The storm outside is the peace within.
+    </div>
+
+    <div class="footer-links">
+        <a href="https://kkk.education" target="_blank">Education</a>
+        <a href="https://kkk.education/atheden.html" target="_blank">Sacred Music</a>
+        <a href="https://kkk.education/library/133-atheden-lyrics.html" target="_blank">Lyrics</a>
+        <a href="https://kkk.education/library.html" target="_blank">Library</a>
+        <a href="https://kkk.education/cinema.html" target="_blank">Cinema</a>
+        <a href="mailto:wikkkan@kkk.education">Request Citizenship</a>
+    </div>
+
+    <div class="footer-motto">
+        CC0 Publická Dománia · All Love Reserved · Amoriariacka<br>
+        Klarheit · Kraft · Klang · The Three-Fold Ray
+    </div>
+</footer>
+
+<script>
+// ── Lightbox ─────────────────────────────────────────────────────────────────
+function openLightbox() {
+    var lb = document.getElementById('lightbox');
+    lb.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+    var lb = document.getElementById('lightbox');
+    lb.style.display = 'none';
+    document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+});
+
+// ── Star field ────────────────────────────────────────────────────────────────
+(function() {
+    var c = document.getElementById('stars');
+    for (var i = 0; i < 200; i++) {
+        var s = document.createElement('div');
+        s.className = 'star';
+        var size = Math.random() * 2.5 + 0.5;
+        s.style.cssText = [
+            'left:'              + Math.random() * 100 + '%',
+            'top:'               + Math.random() * 100 + '%',
+            'width:'             + size + 'px',
+            'height:'            + size + 'px',
+            'animation-duration:'+ (Math.random() * 5 + 3) + 's',
+            'animation-delay:'   + (Math.random() * 8) + 's',
+            'opacity:'           + (Math.random() * 0.5 + 0.1)
+        ].join(';');
+        c.appendChild(s);
+    }
+})();
+
+// ── Copy coordinates ──────────────────────────────────────────────────────────
+function copyCoords(el, coords) {
+    navigator.clipboard.writeText(coords).catch(function() {
+        var ta = document.createElement('textarea');
+        ta.value = coords;
+        ta.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+    });
+    var toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 2000);
+}
+</script>
+
+<script>
+function printPage() {
+    const philoText = document.querySelector('.philosophy-text')?.innerHTML || '';
+
+    const cards = document.querySelectorAll('.territory-card');
+    let cardsHtml = '';
+    cards.forEach(card => {
+        const name = card.querySelector('.card-name')?.innerText || '';
+        const tag = card.querySelector('.card-tag')?.innerText || '';
+        const type = card.querySelector('.card-type')?.innerText || '';
+        const descs = card.querySelectorAll('.card-desc');
+        const coordsLabel = card.querySelector('.card-coords-label')?.innerText || 'Portal Coordinates';
+        const coords = card.querySelector('.card-coords span')?.innerText || '';
+        const glyphs = card.querySelectorAll('.glyph');
+        let descHtml = '';
+        descs.forEach(d => { descHtml += `<div class="desc">${d.innerHTML}</div>`; });
+        let glyphHtml = '';
+        glyphs.forEach(g => { glyphHtml += `<span class="glyph">${g.innerText}</span>`; });
+        cardsHtml += `<div class="card">
+            <div class="tag">${tag}</div>
+            <h3>${name}</h3>
+            <div class="type">${type}</div>
+            ${descHtml}
+            ${coords ? `<div class="coords-label">${coordsLabel}</div><div class="coords">${coords}</div>` : ''}
+            ${glyphs.length ? `<div class="coords-label">Portal Glyphs</div><div class="glyphs">${glyphHtml}</div>` : ''}
+        </div>`;
+    });
+
+    const steps = document.querySelectorAll('.step');
+    let stepsHtml = '';
+    steps.forEach((step, i) => {
+        const title = step.querySelector('.step-title')?.innerText || '';
+        const desc = step.querySelector('.step-desc')?.innerHTML || '';
+        stepsHtml += `<div class="step-block"><strong>${i+1}. ${title}</strong><p>${desc}</p></div>`;
+    });
+
+    const contactTitle = document.querySelector('.steam-title')?.innerText || '';
+    const contactDesc = document.querySelector('.steam-desc')?.innerHTML || '';
+    const prophecy = document.querySelector('.prophecy')?.innerText || '';
+    const motto = document.querySelector('.footer-motto')?.innerText || '';
+
+    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+    <title>REPUBLICKA · No Man's Sky Eissentam Imperium</title>
+    <style>
+        body { font-family: Georgia, serif; color: #111; background: #fff; margin: 40px; font-size: 11pt; line-height: 1.6; }
+        @page { margin: 1.5cm; size: A4; }
+        @page { @top-center { content: none; } @bottom-center { content: none; } }
+        h1 { font-size: 22pt; border-bottom: 3px solid #000; padding-bottom: 8px; margin-bottom: 4px; }
+        h2 { font-size: 16pt; border-bottom: 1px solid #666; padding-bottom: 6px; margin-top: 32px; }
+        h3 { font-size: 13pt; margin: 8px 0 4px 0; border-bottom: 1px solid #ccc; padding-bottom: 3px; }
+        .subtitle { font-size: 9pt; color: #555; margin-bottom: 24px; }
+        .tag { font-size: 8pt; color: #555; text-transform: uppercase; letter-spacing: 0.1em; }
+        .type { font-size: 9pt; color: #444; font-style: italic; margin-bottom: 8px; }
+        .desc { margin: 8px 0 10px 0; }
+        .coords-label { font-size: 8pt; color: #666; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 10px; }
+        .coords { font-family: monospace; font-size: 12pt; border: 1px solid #666; padding: 4px 10px; display: inline-block; margin: 2px 0; }
+        .glyphs { margin: 4px 0 8px 0; }
+        .glyph { font-family: monospace; border: 1px solid #666; padding: 2px 5px; display: inline-block; margin: 1px; font-size: 10pt; }
+        .card { border: 1px solid #999; padding: 14px; margin-bottom: 18px; page-break-inside: avoid; break-inside: avoid; }
+        .step-block { margin-bottom: 14px; page-break-inside: avoid; break-inside: avoid; }
+        .philosophy { margin-bottom: 24px; font-style: italic; border-left: 3px solid #999; padding-left: 16px; }
+        .prophecy-block { border-top: 1px solid #ccc; margin-top: 30px; padding-top: 12px; font-style: italic; color: #444; font-size: 10pt; }
+        .motto { font-size: 9pt; color: #666; margin-top: 8px; }
+        a { color: #111; }
+    </style></head><body>
+    <h1>REPUBLICKA · No Man's Sky · Eissentam Imperium</h1>
+    <div class="subtitle">Galaxy 10 · Eissentam · Galactic Territory Star Chart · kkk.education/nms.html · CC0 Publická Dománia · All Love Reserved</div>
+
+    <h2>01 · The Philosophy</h2>
+    <div class="philosophy">${philoText}</div>
+
+    <h2>02 · The Star Chart</h2>
+    ${cardsHtml}
+
+    <h2>03 · Citizenship</h2>
+    ${stepsHtml}
+
+    <h2>04 · Find the Republic</h2>
+    <strong>${contactTitle}</strong>
+    <p>${contactDesc}</p>
+
+    <div class="prophecy-block">${prophecy}</div>
+    <div class="motto">${motto}</div>
+    </body></html>`;
+
+    const win = window.open('', '_blank');
+    win.document.write(html);
+    win.document.close();
+    win.focus();
+    setTimeout(() => win.print(), 600);
+}
+</script>
+</body>
+</html>
