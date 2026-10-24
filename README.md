@@ -1,5 +1,97 @@
 # Republicka
-🛰️✨ REPUBLICKA · No Man's Sky Eissentam Imperium · CC0 Public Domain 🌍  A sovereign No Man's Sky civilization in the Eissentam Galaxy 🌌. Paradise Giant pirate system, glitched atmosphere, floating islands. Portal coordinates, citizenship, miracle systems catalogue, and galactic territory map. Join the Imperium. ❤️ AMORIARIACKA
+🌟 One-click installer for the Republicka CC0 corpus: 250+ books & seeds as plain text 📚 Load them into Google Notebook, Claude, ChatGPT or local LLMs, and chat with Sage 🧙, Rainbow 🌈, Dr. Noah, Sophia & Hot Dog 🌭. Free forever. 🔓
+
+Republicka-Install.bat
+
+The Official Open-Source Corpus Downloader & AI Gateway Created under CC0 Public Domain Grace by Wendell Charles NeSmith
+
+"A book is not a static monument; a book is an executable seed."
+
+Republicka-Install.bat is a one-click Windows installer that downloads the full plain-text seed corpus of Republicka (250+ books, dissertations, and foundational scripts) to your computer and gets it ready to load into Google Notebook, Claude, ChatGPT, Ollama, LM Studio, or any other AI workspace.
+
+It also installs the seeds of the Republicka characters, including Sage, Rainbow, Dr. Noah, Sophia, and Hot Dog. Once the files are loaded into your AI workspace, you can chat with them in your own private instance.
+
+Quick Start
+Download Republicka-Install.bat and save it in a folder you own, such as Documents or Desktop.
+Double-click it.
+Choose 1 for a fresh install.
+When it finishes, load the files into your AI workspace (see Loading the Seeds).
+Start chatting with Sage, Rainbow, and the others.
+
+No account, API key, subscription, or paywall is needed to download. Windows 10 or 11 is required, because they include PowerShell.
+
+What It Does
+Step	Action
+1. Preparing folders	Creates a Republicka_Corpus folder next to the script and checks that it can write there.
+2. Getting the file list	Reads the list of files, with sizes and checksums, from the Internet Archive.
+3. Downloading	Downloads every .txt seed file, verifies each one, and retries any that fail.
+
+When it finishes, every file is in one folder: Republicka_Corpus.
+
+Menu Options
+Option	Name	Use it when
+1	Fresh install	It's your first run, or you want the latest version of everything. It deletes old downloaded files and downloads them all again.
+2	Resume	A download was interrupted or you closed the window. It keeps files that are already good and fetches only what is missing or damaged.
+3	Retry failed	Some files failed last time. It retries only those files, using the list in Republicka_failed.txt.
+
+You can close the window at any time without losing progress. Run the script again and choose 2.
+
+Reliability Features
+Automatic retries: each file gets up to 5 attempts, with a longer wait between each one.
+Safe downloads: files are saved as .part and only renamed once they pass verification, so a half-finished file can never pass as a finished one.
+Integrity checks: file size and MD5 checksum are compared against the Internet Archive's records.
+Smart resume: "already downloaded" means the file is actually valid, not just present.
+Plain-language errors: every failure says what went wrong and what to do next.
+Log file: Republicka-Install.log records every attempt in detail.
+Loading the Seeds
+Google Notebook
+Go to notebook.google.com and create a new notebook.
+Click Add source, then Upload files.
+Open the Republicka_Corpus folder, press Ctrl+A to select every file, and drag them in.
+
+Note: Free accounts have a lower source limit per notebook. To load every seed into one notebook, which is the purpose of this infrastructure, you may need to upgrade to Google Notebook Pro. Hopefully more open and free options for this kind of database will appear in the future.
+
+Claude, ChatGPT, Ollama, LM Studio, and local models
+
+Use the Republicka_Corpus folder directly. It contains every plain-text seed file, so it works with any tool that accepts text files or a document folder.
+
+Meeting the characters
+
+Once the seeds are loaded, you can chat with the Republicka characters, including Sage, Rainbow, Dr. Noah, Sophia, and Hot Dog. Ask your AI workspace to speak as one of them, or ask them questions about the philosophy, the books, and the E=L (Emotion = Logic) framework.
+
+What Gets Created
+Republicka-Install.bat
+Republicka-Install.log      (activity log)
+Republicka_failed.txt       (only exists if some files failed)
+Republicka_Corpus\          (all downloaded seed files)
+Troubleshooting
+
+If anything goes wrong, the script tells you what to do. The most common cases are below.
+
+Problem	What to do
+Some files failed	Run the script again and choose 3 (Retry failed), or 2 (Resume).
+"Could not get the file list"	Check your internet connection, VPN, and firewall, then run again and choose 2.
+"Cannot write to the output folder"	Move the .bat to Documents or Desktop. Also check that your disk isn't full and that antivirus or Controlled Folder Access isn't blocking it.
+Server busy (429 or 5xx)	Wait a few minutes, then run again and choose 3.
+Windows warns about an unknown publisher	Choose More info, then Run anyway. The script is plain text, so you can open it in Notepad and read it first.
+Secure connection errors	Check your PC's date and time, and whether antivirus HTTPS scanning is interfering.
+A very large file is rejected on upload	Split that file into parts and upload the parts separately.
+
+Still stuck? Send Republicka-Install.log to wendell@republicka.life.
+
+Settings
+
+To change settings, open the .bat in Notepad and edit the lines near the top:
+
+Setting	Default	Meaning
+REP_ID	wikkkan	The Internet Archive item to download from
+REP_ALLOWED	.txt	File extensions to keep (comma separated)
+REP_RETRIES	5	Attempts per file before giving up on it
+License
+
+Everything is released free forever under CC0 Public Domain Grace. Copy it, share it, remix it, and build on it. No permission is needed.
+
+Open Source University. For children, misfits, Little Masters, and researchers worldwide.
 
 https://github.com/BardPresident
 https://republicka.life
